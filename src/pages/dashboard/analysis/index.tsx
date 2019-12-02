@@ -24,24 +24,18 @@ export interface LoadingEffect {
   }
 }
 
-interface AnalysisProps {
-  dashboardAnalysis: AnalysisData;
-  loadingEffect: LoadingEffect;
-}
-
 export type SalesType = 'all' | 'online' | 'stores';
 export type DateType = 'today' | 'week' | 'month' | 'year';
 
 export default function AnalysisFC() {
-  const {dashboardAnalysis, loadingEffect} = useSelector<any, AnalysisProps>(state => ({
-    dashboardAnalysis: state.dashboardAnalysis,
-    loadingEffect: state.loading
-  }));
-  const loading = loadingEffect.effects['dashboardAnalysis/fetch'];
+  const dashboardAnalysis = useSelector<any, AnalysisData>(state => state.dashboardAnalysis);
   const dispatch = useDispatch();
   const [salesType, setSalesType] = useState<SalesType>('all');
   const [currentTabKey, setCurrentTabKey] = useState('');
   const [rangePickerValue, setRangePickerValue] = useState(getTimeDistance('year'));
+
+  const loading = false;
+  console.log('今天天气不错');
 
   const {
     visitData, visitData2, salesData, searchData, offlineData, offlineChartData, salesTypeData, salesTypeDataOnline, salesTypeDataOffline,
