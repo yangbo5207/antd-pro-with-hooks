@@ -29,13 +29,13 @@ export type DateType = 'today' | 'week' | 'month' | 'year';
 
 export default function AnalysisFC() {
   const dashboardAnalysis = useSelector<any, AnalysisData>(state => state.dashboardAnalysis);
+  const loadingEffect = useSelector<any, LoadingEffect>(state => state.loading);
+  const loading = loadingEffect.effects['dashboardAnalysis/fetch'];
   const dispatch = useDispatch();
   const [salesType, setSalesType] = useState<SalesType>('all');
   const [currentTabKey, setCurrentTabKey] = useState('');
   const [rangePickerValue, setRangePickerValue] = useState(getTimeDistance('year'));
-
-  const loading = false;
-
+  
   const {
     visitData, visitData2, salesData, searchData, offlineData, offlineChartData, salesTypeData, salesTypeDataOnline, salesTypeDataOffline,
   } = dashboardAnalysis;
