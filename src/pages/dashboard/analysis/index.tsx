@@ -1,14 +1,11 @@
 import { Col, Dropdown, Icon, Menu, Row } from 'antd';
-import React, { Component, Suspense } from 'react';
-
-import { Dispatch } from 'redux';
+import React, { Suspense, useEffect, useState } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { RadioChangeEvent } from 'antd/es/radio';
-import { RangePickerValue } from 'antd/es/date-picker/interface';
-import { connect } from 'dva';
+import { useSelector, useDispatch } from 'dva';
 import PageLoading from './components/PageLoading';
 import { getTimeDistance } from './utils/utils';
 import { AnalysisData } from './data.d';
+import { RangePickerValue } from 'antd/es/date-picker/interface';
 import styles from './style.less';
 
 const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
@@ -17,204 +14,141 @@ const TopSearch = React.lazy(() => import('./components/TopSearch'));
 const ProportionSales = React.lazy(() => import('./components/ProportionSales'));
 const OfflineData = React.lazy(() => import('./components/OfflineData'));
 
+export interface LoadingEffect {
+  effects: {
+    [key: string]: boolean
+  },
+  global: boolean,
+  models: {
+    [key: string]: boolean
+  }
+}
+
 interface AnalysisProps {
   dashboardAnalysis: AnalysisData;
-  dispatch: Dispatch<any>;
-  loading: boolean;
+  loadingEffect: LoadingEffect;
 }
 
-interface AnalysisState {
-  salesType: 'all' | 'online' | 'stores';
-  currentTabKey: string;
-  rangePickerValue: RangePickerValue;
-}
+export type SalesType = 'all' | 'online' | 'stores';
+export type DateType = 'today' | 'week' | 'month' | 'year';
 
-@connect(
-  ({
-    dashboardAnalysis,
-    loading,
-  }: {
-    dashboardAnalysis: any;
-    loading: {
-      effects: { [key: string]: boolean };
-    };
-  }) => ({
-    dashboardAnalysis,
-    loading: loading.effects['dashboardAnalysis/fetch'],
-  }),
-)
-class Analysis extends Component<AnalysisProps, AnalysisState> {
-  state: AnalysisState = {
-    salesType: 'all',
-    currentTabKey: '',
-    rangePickerValue: getTimeDistance('year'),
-  };
+export default function AnalysisFC() {
+  const {dashboardAnalysis, loadingEffect} = useSelector<any, AnalysisProps>(state => ({
+    dashboardAnalysis: state.dashboardAnalysis,
+    loadingEffect: state.loading
+  }));
+  const loading = loadingEffect.effects['dashboardAnalysis/fetch'];
+  const dispatch = useDispatch();
+  const [salesType, setSalesType] = useState<SalesType>('all');
+  const [currentTabKey, setCurrentTabKey] = useState('');
+  const [rangePickerValue, setRangePickerValue] = useState(getTimeDistance('year'));
 
-  reqRef: number = 0;
+  const {
+    visitData, visitData2, salesData, searchData, offlineData, offlineChartData, salesTypeData, salesTypeDataOnline, salesTypeDataOffline,
+  } = dashboardAnalysis;
 
-  timeoutId: number = 0;
+  useEffect(() => {
+    dispatch({ type: 'dashboardAnalysis/fetch'});
+  }, []);
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    this.reqRef = requestAnimationFrame(() => {
-      dispatch({
-        type: 'dashboardAnalysis/fetch',
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'dashboardAnalysis/clear',
-    });
-    cancelAnimationFrame(this.reqRef);
-    clearTimeout(this.timeoutId);
-  }
-
-  handleChangeSalesType = (e: RadioChangeEvent) => {
-    this.setState({
-      salesType: e.target.value,
-    });
-  };
-
-  handleTabChange = (key: string) => {
-    this.setState({
-      currentTabKey: key,
-    });
-  };
-
-  handleRangePickerChange = (rangePickerValue: RangePickerValue) => {
-    const { dispatch } = this.props;
-    this.setState({
-      rangePickerValue,
-    });
-
-    dispatch({
-      type: 'dashboardAnalysis/fetchSalesData',
-    });
-  };
-
-  selectDate = (type: 'today' | 'week' | 'month' | 'year') => {
-    const { dispatch } = this.props;
-    this.setState({
-      rangePickerValue: getTimeDistance(type),
-    });
-
-    dispatch({
-      type: 'dashboardAnalysis/fetchSalesData',
-    });
-  };
-
-  isActive = (type: 'today' | 'week' | 'month' | 'year') => {
-    const { rangePickerValue } = this.state;
+  const isActive = (type: DateType) => {
     const value = getTimeDistance(type);
     if (!rangePickerValue[0] || !rangePickerValue[1]) {
       return '';
     }
-    if (
-      rangePickerValue[0].isSame(value[0], 'day') &&
-      rangePickerValue[1].isSame(value[1], 'day')
-    ) {
+    if (rangePickerValue[0].isSame(value[0], 'day') && rangePickerValue[1].isSame(value[1], 'day')) {
       return styles.currentDate;
     }
     return '';
+  }
+
+  const handleRangePickerChange = (rangePickerValue: RangePickerValue) => {
+    setRangePickerValue(rangePickerValue)
+    dispatch({
+      type: 'dashboardAnalysis/fetchSalesData',
+    });
   };
 
-  render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
-    const { dashboardAnalysis, loading } = this.props;
-    const {
-      visitData,
-      visitData2,
-      salesData,
-      searchData,
-      offlineData,
-      offlineChartData,
-      salesTypeData,
-      salesTypeDataOnline,
-      salesTypeDataOffline,
-    } = dashboardAnalysis;
-    let salesPieData;
-    if (salesType === 'all') {
-      salesPieData = salesTypeData;
-    } else {
-      salesPieData = salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
-    }
-    const menu = (
-      <Menu>
-        <Menu.Item>操作一</Menu.Item>
-        <Menu.Item>操作二</Menu.Item>
-      </Menu>
-    );
+  const selectDate = (type: DateType) => {
+    setRangePickerValue(getTimeDistance(type));
+    dispatch({
+      type: 'dashboardAnalysis/fetchSalesData',
+    });
+  };
 
-    const dropdownGroup = (
-      <span className={styles.iconGroup}>
-        <Dropdown overlay={menu} placement="bottomRight">
-          <Icon type="ellipsis" />
-        </Dropdown>
-      </span>
-    );
+  const dropdownGroup = (
+    <span className={styles.iconGroup}>
+      <Dropdown 
+        overlay={
+          <Menu>
+            <Menu.Item>操作一</Menu.Item>
+            <Menu.Item>操作二</Menu.Item>
+          </Menu>
+        } 
+        placement="bottomRight"
+      >
+        <Icon type="ellipsis" />
+      </Dropdown>
+    </span>
+  );
 
-    const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
-    return (
-      <GridContent>
-        <React.Fragment>
-          <Suspense fallback={<PageLoading />}>
-            <IntroduceRow loading={loading} visitData={visitData} />
-          </Suspense>
+  const salesPieData = {
+    all: salesTypeData,
+    online: salesTypeDataOnline,
+    stores: salesTypeDataOffline
+  }[salesType];
+  const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
+
+  return (
+    <GridContent>
+      <Suspense fallback={<PageLoading />}>
+        <IntroduceRow loading={loading} visitData={visitData} />
+      </Suspense>
+
+      <Suspense fallback={null}>
+        <SalesCard
+          rangePickerValue={rangePickerValue}
+          salesData={salesData}
+          isActive={isActive}
+          handleRangePickerChange={handleRangePickerChange}
+          loading={loading}
+          selectDate={selectDate}
+        />
+      </Suspense>
+
+      <Row gutter={24} type="flex" style={{marginTop: 24,}}>
+        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
           <Suspense fallback={null}>
-            <SalesCard
-              rangePickerValue={rangePickerValue}
-              salesData={salesData}
-              isActive={this.isActive}
-              handleRangePickerChange={this.handleRangePickerChange}
+            <TopSearch
               loading={loading}
-              selectDate={this.selectDate}
+              visitData2={visitData2}
+              searchData={searchData}
+              dropdownGroup={dropdownGroup}
             />
           </Suspense>
-          <Row
-            gutter={24}
-            type="flex"
-            style={{
-              marginTop: 24,
-            }}
-          >
-            <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-              <Suspense fallback={null}>
-                <TopSearch
-                  loading={loading}
-                  visitData2={visitData2}
-                  searchData={searchData}
-                  dropdownGroup={dropdownGroup}
-                />
-              </Suspense>
-            </Col>
-            <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-              <Suspense fallback={null}>
-                <ProportionSales
-                  dropdownGroup={dropdownGroup}
-                  salesType={salesType}
-                  loading={loading}
-                  salesPieData={salesPieData}
-                  handleChangeSalesType={this.handleChangeSalesType}
-                />
-              </Suspense>
-            </Col>
-          </Row>
+        </Col>
+        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
           <Suspense fallback={null}>
-            <OfflineData
-              activeKey={activeKey}
+            <ProportionSales
+              dropdownGroup={dropdownGroup}
+              salesType={salesType}
               loading={loading}
-              offlineData={offlineData}
-              offlineChartData={offlineChartData}
-              handleTabChange={this.handleTabChange}
+              salesPieData={salesPieData}
+              handleChangeSalesType={(e) => setSalesType(e.target.value)}
             />
           </Suspense>
-        </React.Fragment>
-      </GridContent>
-    );
-  }
+        </Col>
+      </Row>
+
+      <Suspense fallback={null}>
+        <OfflineData
+          activeKey={activeKey}
+          loading={loading}
+          offlineData={offlineData}
+          offlineChartData={offlineChartData}
+          handleTabChange={setCurrentTabKey}
+        />
+      </Suspense>
+    </GridContent>
+  )
 }
-
-export default Analysis;

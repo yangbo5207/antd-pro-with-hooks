@@ -18,26 +18,19 @@ const topColResponsiveProps = {
   style: { marginBottom: 24 },
 };
 
-const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: VisitDataType[] }) => (
+export interface IntroduceRowProps {
+  loading: boolean;
+  visitData: VisitDataType[]
+}
+
+const IntroduceRow = ({ loading, visitData }: IntroduceRowProps) => (
   <Row gutter={24} type="flex">
     <Col {...topColResponsiveProps}>
       <ChartCard
         bordered={false}
-        title={
-          <FormattedMessage
-            id="dashboard-analysis.analysis.total-sales"
-            defaultMessage="Total Sales"
-          />
-        }
+        title={<FormattedMessage id="dashboard-analysis.analysis.total-sales" defaultMessage="Total Sales" />}
         action={
-          <Tooltip
-            title={
-              <FormattedMessage
-                id="dashboard-analysis.analysis.introduce"
-                defaultMessage="Introduce"
-              />
-            }
-          >
+          <Tooltip title={<FormattedMessage id="dashboard-analysis.analysis.introduce" defaultMessage="Introduce" />}>
             <Icon type="info-circle-o" />
           </Tooltip>
         }
@@ -45,12 +38,7 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Vis
         total={() => <Yuan>126560</Yuan>}
         footer={
           <Field
-            label={
-              <FormattedMessage
-                id="dashboard-analysis.analysis.day-sales"
-                defaultMessage="Daily Sales"
-              />
-            }
+            label={<FormattedMessage id="dashboard-analysis.analysis.day-sales" defaultMessage="Daily Sales" />}
             value={`￥${numeral(12423).format('0,0')}`}
           />
         }
@@ -73,26 +61,14 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Vis
         loading={loading}
         title={<FormattedMessage id="dashboard-analysis.analysis.visits" defaultMessage="Visits" />}
         action={
-          <Tooltip
-            title={
-              <FormattedMessage
-                id="dashboard-analysis.analysis.introduce"
-                defaultMessage="Introduce"
-              />
-            }
-          >
+          <Tooltip title={<FormattedMessage id="dashboard-analysis.analysis.introduce" defaultMessage="Introduce" />}>
             <Icon type="info-circle-o" />
           </Tooltip>
         }
         total={numeral(8846).format('0,0')}
         footer={
           <Field
-            label={
-              <FormattedMessage
-                id="dashboard-analysis.analysis.day-visits"
-                defaultMessage="Daily Visits"
-              />
-            }
+            label={<FormattedMessage id="dashboard-analysis.analysis.day-visits" defaultMessage="Daily Visits" />}
             value={numeral(1234).format('0,0')}
           />
         }
@@ -101,34 +77,21 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Vis
         <MiniArea color="#975FE4" data={visitData} />
       </ChartCard>
     </Col>
+
     <Col {...topColResponsiveProps}>
       <ChartCard
         bordered={false}
         loading={loading}
-        title={
-          <FormattedMessage id="dashboard-analysis.analysis.payments" defaultMessage="Payments" />
-        }
+        title={<FormattedMessage id="dashboard-analysis.analysis.payments" defaultMessage="Payments" />}
         action={
-          <Tooltip
-            title={
-              <FormattedMessage
-                id="dashboard-analysis.analysis.introduce"
-                defaultMessage="Introduce"
-              />
-            }
-          >
+          <Tooltip title={<FormattedMessage id="dashboard-analysis.analysis.introduce" defaultMessage="Introduce" />}>
             <Icon type="info-circle-o" />
           </Tooltip>
         }
         total={numeral(6560).format('0,0')}
         footer={
           <Field
-            label={
-              <FormattedMessage
-                id="dashboard-analysis.analysis.conversion-rate"
-                defaultMessage="Conversion Rate"
-              />
-            }
+            label={<FormattedMessage id="dashboard-analysis.analysis.conversion-rate" defaultMessage="Conversion Rate" />}
             value="60%"
           />
         }
@@ -137,24 +100,15 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Vis
         <MiniBar data={visitData} />
       </ChartCard>
     </Col>
+
     <Col {...topColResponsiveProps}>
       <ChartCard
         loading={loading}
         bordered={false}
-        title={
-          <FormattedMessage
-            id="dashboard-analysis.analysis.operational-effect"
-            defaultMessage="Operational Effect"
-          />
-        }
+        title={<FormattedMessage id="dashboard-analysis.analysis.operational-effect" defaultMessage="Operational Effect" />}
         action={
           <Tooltip
-            title={
-              <FormattedMessage
-                id="dashboard-analysis.analysis.introduce"
-                defaultMessage="Introduce"
-              />
-            }
+            title={<FormattedMessage id="dashboard-analysis.analysis.introduce" defaultMessage="Introduce" />}
           >
             <Icon type="info-circle-o" />
           </Tooltip>
