@@ -35,7 +35,6 @@ export default function AnalysisFC() {
   const [rangePickerValue, setRangePickerValue] = useState(getTimeDistance('year'));
 
   const loading = false;
-  console.log('今天天气不错');
 
   const {
     visitData, visitData2, salesData, searchData, offlineData, offlineChartData, salesTypeData, salesTypeDataOnline, salesTypeDataOffline,
