@@ -36,7 +36,7 @@ const initState = {
 };
 
 const Model: ModelType = {
-  namespace: 'dashboardAnalysis',
+  namespace: "dashboardAnalysis",
 
   state: initState,
 
@@ -44,32 +44,25 @@ const Model: ModelType = {
     *fetch(_, { call, put }) {
       const response = yield call(fakeChartData);
       yield put({
-        type: 'save',
-        payload: response,
+        type: "save",
+        payload: response
       });
     },
     *fetchSalesData(_, { call, put }) {
       const response = yield call(fakeChartData);
       yield put({
-        type: 'save',
+        type: "save",
         payload: {
-          salesData: response.salesData,
-        },
+          salesData: response.salesData
+        }
       });
-    },
+    }
   },
 
   reducers: {
-    save(state, { payload }) {
-      return {
-        ...state,
-        ...payload,
-      };
-    },
-    clear() {
-      return initState;
-    },
-  },
+    save: (state, { payload }) => ({ ...state, ...payload }),
+    clear: () => initState
+  }
 };
 
 export default Model;
