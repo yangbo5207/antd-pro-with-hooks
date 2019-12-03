@@ -159,7 +159,7 @@ export default (__IS_BROWSER ? null : serverRender);
 
     // Umi UI Bubble
     require('../../../node_modules/umi-plugin-ui/lib/bubble').default({
-      port: 3002,
+      port: 3000,
       path: '/Users/yangbo/develop/advance-course/antd-pro-with-hooks',
       currentProject: '',
       isBigfish: undefined,
