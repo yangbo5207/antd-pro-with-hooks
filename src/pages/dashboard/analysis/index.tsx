@@ -34,7 +34,6 @@ export default function AnalysisFC() {
   const dispatch = useDispatch();
   const [salesType, setSalesType] = useState<SalesType>('all');
   const [currentTabKey, setCurrentTabKey] = useState('');
-  const [rangePickerValue, setRangePickerValue] = useState(getTimeDistance('year'));
   
   const {
     visitData, visitData2, salesData, searchData, offlineData, offlineChartData, salesTypeData, salesTypeDataOnline, salesTypeDataOffline,
@@ -43,31 +42,6 @@ export default function AnalysisFC() {
   useEffect(() => {
     dispatch({ type: 'dashboardAnalysis/fetch'});
   }, []);
-
-  const isActive = (type: DateType) => {
-    const value = getTimeDistance(type);
-    if (!rangePickerValue[0] || !rangePickerValue[1]) {
-      return '';
-    }
-    if (rangePickerValue[0].isSame(value[0], 'day') && rangePickerValue[1].isSame(value[1], 'day')) {
-      return styles.currentDate;
-    }
-    return '';
-  }
-
-  const handleRangePickerChange = (rangePickerValue: RangePickerValue) => {
-    setRangePickerValue(rangePickerValue)
-    dispatch({
-      type: 'dashboardAnalysis/fetchSalesData',
-    });
-  };
-
-  const selectDate = (type: DateType) => {
-    setRangePickerValue(getTimeDistance(type));
-    dispatch({
-      type: 'dashboardAnalysis/fetchSalesData',
-    });
-  };
 
   const dropdownGroup = (
     <span className={styles.iconGroup}>
@@ -95,18 +69,11 @@ export default function AnalysisFC() {
   return (
     <GridContent>
       <Suspense fallback={<PageLoading />}>
-        <IntroduceRow loading={loading} visitData={visitData} />
+        <IntroduceRow visitData={visitData} />
       </Suspense>
 
       <Suspense fallback={null}>
-        <SalesCard
-          rangePickerValue={rangePickerValue}
-          salesData={salesData}
-          isActive={isActive}
-          handleRangePickerChange={handleRangePickerChange}
-          loading={loading}
-          selectDate={selectDate}
-        />
+        <SalesCard salesData={salesData} onChange={() => {}} />
       </Suspense>
 
       <Row gutter={24} type="flex" style={{marginTop: 24,}}>

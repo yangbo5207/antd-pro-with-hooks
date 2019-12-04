@@ -19,11 +19,10 @@ const topColResponsiveProps = {
 };
 
 export interface IntroduceRowProps {
-  loading: boolean;
   visitData: VisitDataType[]
 }
 
-const IntroduceRow = ({ loading, visitData }: IntroduceRowProps) => (
+const IntroduceRow = ({ visitData }: IntroduceRowProps) => (
   <Row gutter={24} type="flex">
     <Col {...topColResponsiveProps}>
       <ChartCard
@@ -34,7 +33,6 @@ const IntroduceRow = ({ loading, visitData }: IntroduceRowProps) => (
             <Icon type="info-circle-o" />
           </Tooltip>
         }
-        loading={loading}
         total={() => <Yuan>126560</Yuan>}
         footer={
           <Field
@@ -58,7 +56,6 @@ const IntroduceRow = ({ loading, visitData }: IntroduceRowProps) => (
     <Col {...topColResponsiveProps}>
       <ChartCard
         bordered={false}
-        loading={loading}
         title={<FormattedMessage id="dashboard-analysis.analysis.visits" defaultMessage="Visits" />}
         action={
           <Tooltip title={<FormattedMessage id="dashboard-analysis.analysis.introduce" defaultMessage="Introduce" />}>
@@ -81,7 +78,6 @@ const IntroduceRow = ({ loading, visitData }: IntroduceRowProps) => (
     <Col {...topColResponsiveProps}>
       <ChartCard
         bordered={false}
-        loading={loading}
         title={<FormattedMessage id="dashboard-analysis.analysis.payments" defaultMessage="Payments" />}
         action={
           <Tooltip title={<FormattedMessage id="dashboard-analysis.analysis.introduce" defaultMessage="Introduce" />}>
@@ -103,7 +99,6 @@ const IntroduceRow = ({ loading, visitData }: IntroduceRowProps) => (
 
     <Col {...topColResponsiveProps}>
       <ChartCard
-        loading={loading}
         bordered={false}
         title={<FormattedMessage id="dashboard-analysis.analysis.operational-effect" defaultMessage="Operational Effect" />}
         action={
