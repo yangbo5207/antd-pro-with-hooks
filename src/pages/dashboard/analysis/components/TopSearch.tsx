@@ -1,4 +1,4 @@
-import { Card, Col, Icon, Row, Table, Tooltip } from 'antd';
+import { Card, Col, Icon, Row, Table, Tooltip, Dropdown, Menu } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
 import numeral from 'numeral';
@@ -8,6 +8,22 @@ import { MiniArea } from './Charts';
 import NumberInfo from './NumberInfo';
 import Trend from './Trend';
 import styles from '../style.less';
+
+export const dropdownGroup = (
+  <span className={styles.iconGroup}>
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item>操作一</Menu.Item>
+          <Menu.Item>操作二</Menu.Item>
+        </Menu>
+      }
+      placement="bottomRight"
+    >
+      <Icon type="ellipsis" />
+    </Dropdown>
+  </span>
+);
 
 const columns = [
   {
@@ -49,18 +65,13 @@ const columns = [
 ];
 
 const TopSearch = ({
-  loading,
   visitData2,
   searchData,
-  dropdownGroup,
 }: {
-  loading: boolean;
   visitData2: VisitDataType[];
-  dropdownGroup: React.ReactNode;
   searchData: SearchDataType[];
 }) => (
   <Card
-    loading={loading}
     bordered={false}
     title={
       <FormattedMessage

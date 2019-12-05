@@ -1,6 +1,6 @@
 import { Card, Col, Row, Tabs } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import React from 'react';
+import React, { useState } from 'react';
 import { OfflineChartData, OfflineDataType } from '../data.d';
 
 import { TimelineChart, Pie } from './Charts';
@@ -45,20 +45,18 @@ const CustomTab = ({
 const { TabPane } = Tabs;
 
 const OfflineData = ({
-  activeKey,
-  loading,
   offlineData,
   offlineChartData,
-  handleTabChange,
 }: {
-  activeKey: string;
-  loading: boolean;
   offlineData: OfflineDataType[];
   offlineChartData: OfflineChartData[];
-  handleTabChange: (activeKey: string) => void;
-}) => (
-  <Card loading={loading} className={styles.offlineCard} bordered={false} style={{ marginTop: 32 }}>
-    <Tabs activeKey={activeKey} onChange={handleTabChange}>
+}) => {
+  const [currentTabKey, setCurrentTabKey] = useState('');
+  const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
+
+  return (
+  <Card className={styles.offlineCard} bordered={false} style={{ marginTop: 32 }}>
+    <Tabs activeKey={activeKey} onChange={setCurrentTabKey}>
       {offlineData.map(shop => (
         <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
           <div style={{ padding: '0 24px' }}>
@@ -76,5 +74,6 @@ const OfflineData = ({
     </Tabs>
   </Card>
 );
+}
 
 export default OfflineData;
