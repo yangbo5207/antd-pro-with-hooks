@@ -9,7 +9,7 @@ import { ModalState } from './model';
 import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
 import { ActivitiesType, CurrentUser } from './data.d';
-import { LoadingEffect } from '@/pages/dashboard/analysis';
+import { LoadingEffect } from '@/pages/dashboard/analysis/data';
 
 const links = [
   {
