@@ -44,7 +44,9 @@ export default function AnalysisFC() {
     dispatch({ type: 'dashboardAnalysis/fetch'});
   }, []);
 
-  if (loading) { return null; }
+  if (loading) { 
+    return <PageLoading />; 
+  }
 
   return (
     <GridContent>
