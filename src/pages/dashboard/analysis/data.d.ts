@@ -3,6 +3,16 @@ export interface VisitDataType {
   y: number;
 }
 
+export interface LoadingEffect {
+  effects: {
+    [key: string]: boolean;
+  };
+  global: boolean;
+  models: {
+    [key: string]: boolean;
+  };
+}
+
 export interface SearchDataType {
   index: number;
   keyword: string;

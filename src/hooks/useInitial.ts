@@ -53,8 +53,9 @@ export default function useInitial<T, P>(
 
   return {
     loading,
+    setLoading: (loading: boolean) => setStore({...store, loading}),
     data,
     errMsg,
-    setParams
+    setParams,
   };
 }

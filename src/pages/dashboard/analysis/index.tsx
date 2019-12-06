@@ -1,79 +1,55 @@
 import { Col, Row } from 'antd';
-import React, { Suspense, useEffect } from 'react';
+import React from 'react';
 import { GridContent } from '@ant-design/pro-layout';
-import { useSelector, useDispatch } from 'dva';
-import PageLoading from './components/PageLoading';
+import { fakeChartData } from "./service";
 import { AnalysisData } from './data.d';
+import useInitial from '@/hooks/useInitial';
+import { initState } from '@/pages/dashboard/analysis/model';
 
-const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
-const SalesCard = React.lazy(() => import('./components/SalesCard'));
-const TopSearch = React.lazy(() => import('./components/TopSearch'));
-const ProportionSales = React.lazy(() => import('./components/ProportionSales'));
-const OfflineData = React.lazy(() => import('./components/OfflineData'));
-
-export interface LoadingEffect {
-  effects: {
-    [key: string]: boolean
-  },
-  global: boolean,
-  models: {
-    [key: string]: boolean
-  }
-}
+import IntroduceRow from "./components/IntroduceRow";
+import SalesCard from "./components/SalesCard";
+import TopSearch from "./components/TopSearch";
+import ProportionSales from "./components/ProportionSales";
+import OfflineData from "./components/OfflineData";
 
 export type SalesType = 'all' | 'online' | 'stores';
 export type DateType = 'today' | 'week' | 'month' | 'year';
 
 export default function AnalysisFC() {
-  const dashboardAnalysis = useSelector<any, AnalysisData>(state => state.dashboardAnalysis);
-  const loadingEffect = useSelector<any, LoadingEffect>(state => state.loading);
-  const loading = loadingEffect.effects['dashboardAnalysis/fetch'];
-  const dispatch = useDispatch();
-  
   const {
-    visitData, visitData2, salesData, searchData, offlineData, offlineChartData, salesTypeData, salesTypeDataOnline, salesTypeDataOffline,
-  } = dashboardAnalysis;
-
+    loading, data, setParams, errMsg, setLoading
+  } = useInitial<AnalysisData, null>(fakeChartData, initState, null);
+  const {
+    visitData, visitData2, salesData, searchData, offlineData, offlineChartData,
+    salesTypeData, salesTypeDataOnline, salesTypeDataOffline,
+  } = data;
   const salesPieData = {
     all: salesTypeData,
     online: salesTypeDataOnline,
     stores: salesTypeDataOffline
   };
 
-  useEffect(() => {
-    dispatch({ type: 'dashboardAnalysis/fetch'});
-  }, []);
-
-  if (loading) { 
-    return <PageLoading />; 
+  if (errMsg) {
+    // 处理异常逻辑
   }
 
   return (
     <GridContent>
-      <Suspense fallback={<PageLoading />}>
-        <IntroduceRow visitData={visitData} />
-      </Suspense>
+      <IntroduceRow visitData={visitData} loading={loading} />
 
-      <Suspense fallback={null}>
-        <SalesCard salesData={salesData} onChange={() => {}} />
-      </Suspense>
+      {/* 这里应该调用setParams，传入参数并且根据新参数重新请求接口，但是由于是demo接口，没有参数，因此直接调用setLoading刷新接口即可， */}
+      <SalesCard loading={loading} salesData={salesData} onChange={() => setLoading(true)} />
 
       <Row gutter={24} type="flex" style={{ marginTop: 24 }}>
         <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-          <Suspense fallback={null}>
-            <TopSearch visitData2={visitData2} searchData={searchData} />
-          </Suspense>
+          <TopSearch loading={loading} visitData2={visitData2} searchData={searchData} />
         </Col>
         <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-          <Suspense fallback={null}>
-            <ProportionSales salesPieData={salesPieData} />
-          </Suspense>
+          <ProportionSales loading={loading} salesPieData={salesPieData} />
         </Col>
       </Row>
 
-      <Suspense fallback={null}>
-        <OfflineData offlineData={offlineData} offlineChartData={offlineChartData} />
-      </Suspense>
+      <OfflineData loading={loading} offlineData={offlineData} offlineChartData={offlineChartData} />
     </GridContent>
   );
 }

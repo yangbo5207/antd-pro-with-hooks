@@ -16,13 +16,15 @@ export interface ProportionSalesProps {
     online: VisitDataType[];
     stores: VisitDataType[];
   };
+  loading: boolean
 }
 
-const ProportionSales = ({salesPieData}: ProportionSalesProps) => {
+const ProportionSales = ({salesPieData, loading}: ProportionSalesProps) => {
   const [salesType, setSalesType] = useState<SalesType>('all');
   const _salesPieData = salesPieData[salesType];
   return (
     <Card
+      loading={loading}
       className={styles.salesCard}
       bordered={false}
       title={

@@ -22,7 +22,7 @@ export interface ModelType {
   };
 }
 
-const initState = {
+export const initState = {
   visitData: [],
   visitData2: [],
   salesData: [],

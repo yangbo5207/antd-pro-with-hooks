@@ -47,15 +47,17 @@ const { TabPane } = Tabs;
 const OfflineData = ({
   offlineData,
   offlineChartData,
+  loading
 }: {
   offlineData: OfflineDataType[];
   offlineChartData: OfflineChartData[];
+  loading: boolean
 }) => {
   const [currentTabKey, setCurrentTabKey] = useState('');
   const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
 
   return (
-  <Card className={styles.offlineCard} bordered={false} style={{ marginTop: 32 }}>
+  <Card loading={loading} className={styles.offlineCard} bordered={false} style={{ marginTop: 32 }}>
     <Tabs activeKey={activeKey} onChange={setCurrentTabKey}>
       {offlineData.map(shop => (
         <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>

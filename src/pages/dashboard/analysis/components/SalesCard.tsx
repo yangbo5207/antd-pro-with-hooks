@@ -24,10 +24,11 @@ export type DateType = "today" | "week" | "month" | "year";
 
 export interface SalesCardProps {
   salesData: VisitDataType[];
-  onChange: (value: RangePickerValue) => any
+  onChange: (value: RangePickerValue) => any,
+  loading: boolean
 }
 
-const SalesCard = ({salesData, onChange}: SalesCardProps) => {
+const SalesCard = ({salesData, onChange, loading}: SalesCardProps) => {
   const [rangePickerValue, setRangePickerValue] = useState(getTimeDistance('year'));
   
   const isActive = (type: DateType) => {
@@ -59,7 +60,7 @@ const SalesCard = ({salesData, onChange}: SalesCardProps) => {
   };
 
   return (
-    <Card bordered={false} bodyStyle={{ padding: 0 }}>
+    <Card bordered={false} bodyStyle={{ padding: 0 }} loading={loading}>
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={

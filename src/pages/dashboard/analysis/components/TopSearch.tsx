@@ -67,11 +67,14 @@ const columns = [
 const TopSearch = ({
   visitData2,
   searchData,
+  loading
 }: {
   visitData2: VisitDataType[];
   searchData: SearchDataType[];
+  loading: boolean
 }) => (
   <Card
+    loading={loading}
     bordered={false}
     title={
       <FormattedMessage

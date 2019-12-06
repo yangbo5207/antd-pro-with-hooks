@@ -19,13 +19,15 @@ const topColResponsiveProps = {
 };
 
 export interface IntroduceRowProps {
-  visitData: VisitDataType[]
+  visitData: VisitDataType[],
+  loading: boolean
 }
 
-const IntroduceRow = ({ visitData }: IntroduceRowProps) => (
+const IntroduceRow = ({ visitData, loading }: IntroduceRowProps) => (
   <Row gutter={24} type="flex">
     <Col {...topColResponsiveProps}>
       <ChartCard
+        loading={loading}
         bordered={false}
         title={<FormattedMessage id="dashboard-analysis.analysis.total-sales" defaultMessage="Total Sales" />}
         action={
@@ -55,6 +57,7 @@ const IntroduceRow = ({ visitData }: IntroduceRowProps) => (
 
     <Col {...topColResponsiveProps}>
       <ChartCard
+        loading={loading}
         bordered={false}
         title={<FormattedMessage id="dashboard-analysis.analysis.visits" defaultMessage="Visits" />}
         action={
@@ -77,6 +80,7 @@ const IntroduceRow = ({ visitData }: IntroduceRowProps) => (
 
     <Col {...topColResponsiveProps}>
       <ChartCard
+        loading={loading}
         bordered={false}
         title={<FormattedMessage id="dashboard-analysis.analysis.payments" defaultMessage="Payments" />}
         action={
@@ -99,6 +103,7 @@ const IntroduceRow = ({ visitData }: IntroduceRowProps) => (
 
     <Col {...topColResponsiveProps}>
       <ChartCard
+        loading={loading}
         bordered={false}
         title={<FormattedMessage id="dashboard-analysis.analysis.operational-effect" defaultMessage="Operational Effect" />}
         action={
