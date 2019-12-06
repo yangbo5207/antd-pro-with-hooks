@@ -1,5 +1,5 @@
+import React from "react";
 import { Col, Row } from 'antd';
-import React from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { fakeChartData } from "./service";
 import { AnalysisData } from './data.d';
@@ -11,9 +11,6 @@ import SalesCard from "./components/SalesCard";
 import TopSearch from "./components/TopSearch";
 import ProportionSales from "./components/ProportionSales";
 import OfflineData from "./components/OfflineData";
-
-export type SalesType = 'all' | 'online' | 'stores';
-export type DateType = 'today' | 'week' | 'month' | 'year';
 
 export default function AnalysisFC() {
   const {
@@ -37,7 +34,7 @@ export default function AnalysisFC() {
     <GridContent>
       <IntroduceRow visitData={visitData} loading={loading} />
 
-      {/* 这里应该调用setParams，传入参数并且根据新参数重新请求接口，但是由于是demo接口，没有参数，因此直接调用setLoading刷新接口即可， */}
+      {/* 这里应该调用setParams(xxxx, true)，传入参数并且根据新参数重新请求接口，但是由于是demo接口设计不够合理，没有参数，因此直接调用setLoading刷新接口即可， */}
       <SalesCard loading={loading} salesData={salesData} onChange={() => setLoading(true)} />
 
       <Row gutter={24} type="flex" style={{ marginTop: 24 }}>
