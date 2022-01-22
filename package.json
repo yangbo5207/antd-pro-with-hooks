@@ -122,7 +122,7 @@
     "lint-staged": "^9.0.0",
     "mockjs": "^1.0.1-beta3",
     "netlify-lambda": "^1.4.13",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.1.1",
     "prettier": "^1.17.1",
     "pro-download": "1.0.1",
     "serverless-http": "^2.0.2",
